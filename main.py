@@ -35,16 +35,6 @@ def save_file(url, content, extension=None, website_name=None):
     with open(filepath, 'wb') as f:
         f.write(content)
 
-def check_robots_txt(url):
-    robots_url = urljoin(url, '/robots.txt')
-    try:
-        response = session.get(robots_url, timeout=5)
-        if response.status_code == 200:
-            return response.text
-        return None
-    except:
-        return None
-
 def grab_webserver(url, base_url=None, depth=0):
     if depth > max_depth:
         return
@@ -111,10 +101,6 @@ def grab_webserver(url, base_url=None, depth=0):
 def main():
     create_output_dir()
     base_url = input("Enter the URL of the webserver to grab: ")
-    robots_txt = check_robots_txt(base_url)
-    if robots_txt and 'Disallow: /' in robots_txt:
-        print("This website has requested not to be crawled. Exiting.")
-        return
     grab_webserver(base_url, base_url)
     print("Webserver grabbing completed. Files saved in the 'output/websitename' directory.")
 
